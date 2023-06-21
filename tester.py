@@ -4,8 +4,12 @@ from constants import *
 
 def tester():
     # Connect to the ecu socket
-    ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ecu_socket.connect((ECU_HOST, ECU_PORT)) # Requesting access to ECU
+    try:
+        ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ecu_socket.connect((ECU_HOST, ECU_PORT)) # Requesting access to ECU
+    except:
+        print("ECU server down ❌")
+        return
 
     challenge_string = ecu_socket.recv(1024).decode()
     print(challenge_string)
