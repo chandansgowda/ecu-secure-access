@@ -1,7 +1,14 @@
 import socket
 import hashlib
+import secrets
+import string
 from rsa import rsa_verify
 
+
+def generate_random_string(length):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    random_string = ''.join(secrets.choice(characters) for _ in range(length))
+    return random_string
 
 def ecu():
     # Create a socket for the ecu
@@ -16,7 +23,7 @@ def ecu():
         print("Received connection from tester:", address)
 
         # Send challenge string to the tester
-        challenge_string = "Thisisasecretstringchallenge"
+        challenge_string = generate_random_string(128)
         challenge_string_hash = hashlib.sha256(challenge_string.encode('utf-8')).hexdigest()
         print(challenge_string_hash)
         tester_socket.send(challenge_string.encode())
