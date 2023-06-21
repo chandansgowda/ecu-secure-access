@@ -3,6 +3,7 @@ import hashlib
 import secrets
 import string
 from rsa import *
+from constants import *
 
 
 def generate_random_string(length):
@@ -13,7 +14,7 @@ def generate_random_string(length):
 def ecu():
     # Create a socket for the ecu
     ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ecu_socket.bind(('localhost', 9002))
+    ecu_socket.bind((ECU_HOST, ECU_PORT))
     ecu_socket.listen(1)
     print("ecu started and listening...")
 

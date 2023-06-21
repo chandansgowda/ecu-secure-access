@@ -1,17 +1,18 @@
 import socket
 from rsa import *
+from constants import *
 
 def tester():
     # Connect to the ecu socket
     ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ecu_socket.connect(('localhost', 9002)) # Requesting access to ECU
+    ecu_socket.connect((ECU_HOST, ECU_PORT)) # Requesting access to ECU
 
     challenge_string = ecu_socket.recv(1024).decode()
     print(challenge_string)
 
     # Connect to the trust center
     trust_center_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    trust_center_socket.connect(('localhost', 8001))
+    trust_center_socket.connect((TRUST_CENTER_HOST, TRUST_CENTER_PORT))
 
     # Request private key from the trust center
     trust_center_socket.send(challenge_string.encode())

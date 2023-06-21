@@ -1,12 +1,13 @@
 import hashlib
 import socket
 from rsa import *
+from constants import *
 
 
 def trust_center():
     # Create a socket for the trust center
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('localhost', 8001))
+    server_socket.bind((TRUST_CENTER_HOST, TRUST_CENTER_PORT))
     server_socket.listen(1)
     print("Trust Center started and listening...")
 
@@ -26,7 +27,7 @@ def trust_center():
 
         # Connect to the ECU
         ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        ecu_socket.connect(('localhost', 9002))
+        ecu_socket.connect((ECU_HOST, ECU_PORT))
         print('Connected to ECU ✅')
 
         # Send tester public key to ecu
