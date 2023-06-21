@@ -7,6 +7,7 @@ from constants import *
 def trust_center():
     # Create a socket for the trust center
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((TRUST_CENTER_HOST, TRUST_CENTER_PORT))
     server_socket.listen(1)
     print("Trust Center started and listening...")

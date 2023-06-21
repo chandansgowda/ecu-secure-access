@@ -14,6 +14,7 @@ def generate_random_string(length):
 def ecu():
     # Create a socket for the ecu
     ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ecu_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     ecu_socket.bind((ECU_HOST, ECU_PORT))
     ecu_socket.listen(1)
     print("ecu started and listening...")
