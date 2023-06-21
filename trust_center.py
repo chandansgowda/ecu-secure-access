@@ -44,6 +44,8 @@ def trust_center():
         tester_socket.send(signed_response)
         print("Sent signed response to tester ✅")
 
+        print("Listening for new connections")
+
         # Close the connection
         tester_socket.close()
         ecu_socket.close()

@@ -2,7 +2,7 @@ import socket
 import hashlib
 import secrets
 import string
-from rsa import rsa_verify
+from rsa import *
 
 
 def generate_random_string(length):
@@ -42,7 +42,9 @@ def ecu():
 
         if signed_response_is_valid:
             print("Signature is VALID\nI can now talk to the tester securely. 🔐✅")
-            tester_socket.send(b"Hey Tester, The signature is verified.")
+            response = "All the sensors in the car are working correctly."
+            encrypted_response = rsa_encrypt(response,tester_public_key)
+            tester_socket.send(encrypted_response)
 
         else:
             print("Incorrect Signature!")

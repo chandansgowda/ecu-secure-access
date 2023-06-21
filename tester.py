@@ -1,4 +1,5 @@
 import socket
+from rsa import *
 
 def tester():
     # Connect to the ecu socket
@@ -22,8 +23,11 @@ def tester():
     ecu_socket.send(signed_response)
     print("Forwarded signed response to ECU ✅")
 
-    verification_status = ecu_socket.recv(1024).decode()
-    print("ECU Message: ",verification_status)
+    # Receive requested data from ECU
+    encrypted_ecu_response = ecu_socket.recv(1024)
+    decrypted_ecu_response = rsa_decrypt(encrypted_ecu_response, tester_private_key)
+
+    print("ECU Response: ",decrypted_ecu_response)
     if True:
         while(True):
             # TODO ECU-Tester Data Exchange

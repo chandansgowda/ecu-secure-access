@@ -78,3 +78,35 @@ def rsa_verify(public_key_str, message, signature):
     except Exception:
         return False  # Signature is invalid
 
+
+def rsa_encrypt(message, public_key_string):
+    public_key = serialization.load_pem_public_key(
+        public_key_string.encode('utf-8'),
+        backend=default_backend()
+    )
+    ciphertext = public_key.encrypt(
+        message.encode('utf-8'),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return ciphertext
+
+
+def rsa_decrypt(ciphertext, private_key_string):
+    private_key = serialization.load_pem_private_key(
+        private_key_string.encode('utf-8'),
+        password=None,
+        backend=default_backend()
+    )
+    plaintext = private_key.decrypt(
+        ciphertext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return plaintext.decode('utf-8')
