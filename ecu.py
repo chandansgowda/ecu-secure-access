@@ -24,6 +24,13 @@ def ecu():
         tester_socket, address = ecu_socket.accept()
         print("Received connection from tester:", address)
 
+        # Check if the tester is trusted
+        tester_mac = tester_socket.recv(1024).decode()
+        if tester_mac not in TRUSTED_MAC_LIST:
+            print("This tester is not trusted ❌")
+            tester_socket.close()
+            continue
+
         # Send challenge string to the tester
         challenge_string = generate_random_string(128)
         challenge_string_hash = hashlib.sha256(challenge_string.encode('utf-8')).hexdigest()

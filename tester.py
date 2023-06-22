@@ -1,6 +1,8 @@
 import socket
+from getmac import get_mac_address as gma
 from rsa import *
 from constants import *
+
 
 def tester():
     # Connect to the ecu socket
@@ -11,7 +13,14 @@ def tester():
         print("ECU server down ❌")
         return
 
+    # Send tester MAC address to ECU
+    ecu_socket.send(gma().encode())
+
+    # Receive challenge string
     challenge_string = ecu_socket.recv(1024).decode()
+    if not challenge_string:
+        print("Access Denied")
+        return
 
     # Connect to the trust center
     trust_center_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
