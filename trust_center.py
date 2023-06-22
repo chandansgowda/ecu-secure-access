@@ -22,25 +22,21 @@ def trust_center():
         print(challenge_string)
 
         # Generate public and private keys
-        tester_private_key, tester_public_key = generate_rsa_keys()
+        trust_center_private_key, trust_center_public_key = generate_rsa_keys()
 
-        print(tester_private_key, tester_public_key)
+        print(trust_center_private_key, trust_center_public_key)
 
         # Connect to the ECU
         ecu_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         ecu_socket.connect((ECU_HOST, ECU_PORT))
         print('Connected to ECU ✅')
 
-        # Send tester public key to ecu
-        ecu_socket.send(tester_public_key.encode())
-        print("Sent tester public key to ECU ✅")
+        # Send trust center public key to ecu
+        ecu_socket.send(trust_center_public_key.encode())
+        print("Sent my public key to ECU ✅")
 
-        # Send tester private key to tester
-        tester_socket.send(tester_private_key.encode())
-        print("Sent tester private key to tester ✅")
-
-        # Encrypt hash using tester private key
-        signed_response = rsa_sign(tester_private_key, challenge_string_hash)
+        # Sign hash using private key
+        signed_response = rsa_sign(trust_center_private_key, challenge_string_hash)
 
         # Send signed response to tester
         tester_socket.send(signed_response)

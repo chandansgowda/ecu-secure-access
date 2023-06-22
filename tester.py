@@ -12,16 +12,13 @@ def tester():
         return
 
     challenge_string = ecu_socket.recv(1024).decode()
-    print(challenge_string)
 
     # Connect to the trust center
     trust_center_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     trust_center_socket.connect((TRUST_CENTER_HOST, TRUST_CENTER_PORT))
 
-    # Request private key from the trust center
+    # Forward challenge string to trust center
     trust_center_socket.send(challenge_string.encode())
-    tester_private_key = trust_center_socket.recv(5096).decode()
-    print("Received Private Key:", tester_private_key)
 
     # Receive signed response from trust center and forward it to ECU
     signed_response = trust_center_socket.recv(5096)
@@ -29,10 +26,9 @@ def tester():
     print("Forwarded signed response to ECU ✅")
 
     # Receive requested data from ECU
-    encrypted_ecu_response = ecu_socket.recv(1024)
-    decrypted_ecu_response = rsa_decrypt(encrypted_ecu_response, tester_private_key)
+    ecu_response = ecu_socket.recv(1024).decode()
 
-    print("ECU Response: ",decrypted_ecu_response)
+    print("ECU Response: ",ecu_response)
     if True:
         while(True):
             # TODO ECU-Tester Data Exchange
