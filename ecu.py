@@ -47,7 +47,9 @@ def ecu():
             tester_socket.send(response.encode())
 
         else:
-            print("Incorrect Signature!")
+            print("Invalid Signature")
+            response = "Signature was not verified!"
+            tester_socket.send(response.encode())
 
 
 if __name__ == "__main__":
